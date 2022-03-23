@@ -295,10 +295,20 @@ after doj.
 Unique key can contain NULL value/values.
 We can have multiple unique columns in a table but primary key can be one.
 -------------------------------------------------------------------------------------- 
+-- Column level
+
 CREATE TABLE Student ( 
     StudentId INTEGER, 
     FName VARCHAR2(10), 
     ContactNo NUMBER(10) CONSTRAINT Stud_cno_uk UNIQUE);
+
+-- Table level 
+
+CREATE TABLE Student ( 
+    StudentId INTEGER, 
+    FName VARCHAR2(10), 
+    ContactNo NUMBER(10),
+    CONSTRAINT Stud_cno_uk UNIQUE(ContactNo));
 
 
    INSERT INTO Student VALUES(1,'Akash',7890123450);
@@ -306,6 +316,49 @@ CREATE TABLE Student (
    INSERT INTO Student VALUES(3,'Rehan',null);
    INSERT INTO Student VALUES(4,'Sirish',null);
 
+If two columns are involved for applying a constraint , it will be always at table level.
+But if only a single column is used for a constraint , it can be applied in both the ways that is
+column and table level. Not null is a constraint that can be applied at column level only.
+------------------------------------------------------------------------------------------------------
+
+CREATE TABLE department(
+   deptid VARCHAR(5) PRIMARY KEY,
+   des VARCHAR(20)
+);
+
+ INSERT INTO department VALUES('D0001','Mkt');
+ INSERT INTO department VALUES('D0002','Sales');
+ 
+
+CREATE TABLE employeedetails(
+        id VARCHAR(5) PRIMARY KEY,
+        name VARCHAR(20),
+        deptid VARCHAR(20));
+
+INSERT INTO employeedetails VALUES('E0001','Ram','D0001');
+INSERT INTO employeedetails VALUES('E0002','Joseph','D0003');
+-- I was expecting that the second insert won't happen because D0003 is not available in the department table but it is inserted
 
 
 
+CREATE TABLE department(
+   deptid VARCHAR2(5) PRIMARY KEY,
+   des VARCHAR2(20)
+);
+
+ INSERT INTO department VALUES('D0001','Mkt');
+ INSERT INTO department VALUES('D0002','Sales');
+ 
+
+CREATE TABLE employeedetails(
+        id VARCHAR2(5) PRIMARY KEY,
+        name VARCHAR2(20),
+        deptid VARCHAR2(20) CONSTRAINT employeedetails_deptid_fk REFERENCES department(deptid));
+
+INSERT INTO employeedetails VALUES('E0001','Ram','D0001');
+INSERT INTO employeedetails VALUES('E0002','Joseph','D0003');
+ORA-02291: integrity constraint (WAL352358.EMPLOYEEDETAILS_DEPTID_FK) violated - parent key not found
+-- The second record is not inserted as D0003 is not present in the parent table department.
+So the foreign key is ensuring that only those ids can be inserted in the child table which is
+present in the master table. 
+---------------------------------------------------------------------------------------------
