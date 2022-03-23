@@ -1,0 +1,82 @@
+* SQL statements=====> The language which is used to instruct the DBMS to interact with Database.
+   
+ 
+* DBMS=========> Database Management System managing the data in the form of adding, updating and
+                 deleting the data
+* Database ====> Holding the data/Container for the data
+------------------------------------------------------------------------------------------
+Q What Database we are going to use?
+A Oracle
+---------------------------------------------------------------------------------------------
+Q Can you name same popular databases(RDBMS)?
+A Oracle, SQL Server, MYSQL, Sybase, DB2
+-------------------------------------------------------------------------------------------------
+The trainees have to give two assessments so need to store the data in relevance to that.
+   employee
+  empid  empname address
+  E0001  Abhi    Kolkata
+  E0002  Rahul   Delhi
+
+  exam
+  examid  desc  
+  J0001   Java
+  D0001   DBMS
+
+   result
+   empid  examid  score
+   E0001   J0001   80 
+   E0002   J0001   90
+   E0001   D0001   56
+   E0002   D0001   78
+
+ Composite primary key =====> empid and examid because 
+in the above case we cannot get the score if we only say the empid 
+and similarly we cannot get the score if we just say the examid 
+but the combination of empid and examid can help us in getting the
+score. So composite primary key is primary key where a single
+column is not enough to identify a record. We need participation of
+multiple columns ( two or more ) to indentify a record or a tupple or a row.
+
+------------------------------------------------------------------------------------------
+Employees and their managers
+ 
+  empid empname dept mgrid
+  E0001 Rakesh  Sales NULL
+  E0002 Sourish Sales E0001
+  E0003 Nitin   Sales E0001
+  E0004 Radha   Sales E0002
+-------------------------------------------------------------
+empid is a primary key and manager id is a foreign key and is linked with the primary key of 
+the same table.
+
+H e l l o
+- - - - - - - - - -
+
+
+  empid name basic
+  E001  Rahul NULL
+
+SELECT empid,name,basic+1000
+FROM employee;
+
+SELECT empid,name
+FROM employee
+WHERE basic IS NULL;
+
+We never write
+
+SELECT empid,name
+FROM employee
+WHERE basic=NULL;
+
+
+
+CREATE TABLE trial ( code VARCHAR2(5) PRIMARY KEY, name VARCHAR2(20))
+
+INSERT INTO trial VALUES('E0001','Ram')
+
+SELECT * FROM trial
+
+SQL is not case sensitive. But we try to write the keywords in uppercase.
+
+
