@@ -172,3 +172,69 @@ So if we have a reference of any record in the child table, in that case we cann
 master table with DROP table command. In that case we have to write the command as]
 DROP TABLE <tablename> CASCADE CONSTRAINTS
 DROP TABLE student CASCADE CONSTRAINTS
+----------------------------------------------------------------------------------------------------
+Constraints can be applied in two ways:
+1) Column level constraint 
+
+   CREATE TABLE book(
+    bookid VARCHAR2(5) CONSTRAINT book_bookid_pk PRIMARY KEY,
+    title VARCHAR2(20),
+    price NUMBER(5,2)
+  )
+ 
+
+2) Table level constraint
+
+ CREATE TABLE book(
+    bookid VARCHAR2(5), 
+    title VARCHAR2(20),
+    price NUMBER(5,2),
+    CONSTRAINT book_bookid_pk PRIMARY KEY(bookid)
+  )
+
+ CREATE TABLE book(
+    bookid VARCHAR2(5), 
+    title VARCHAR2(20),
+    CONSTRAINT book_bookid_pk PRIMARY KEY(bookid),
+    price NUMBER(5,2)
+    
+  )
+
+-----------------------------------------------------------------------------------------------
+TABLE LEVEL CONSTRAINTS ARE APPLIED WHEN MULTIPLE COLUMNS ARE INVLOVED IN APPLYING A CONSTRAINT.
+
+EXAMPLE we need define a composite primary key. Composite primary key cannot be defined at column level. It is always defined at table level.
+ 
+   empid and subjectid together will form a composite primary key.
+
+  So if we write something as 
+
+  CREATE TABLE result (
+    empid VARCHAR2(5) CONSTRAINT result_empid_pk PRIMARY KEY,
+    subjectid VARCHAR2(5) CONSTRAINT result_subjectid_pk PRIMARY KEY,
+    marks INTEGER)
+ [ ORA-02260: table can have only one primary key ]
+
+CREATE TABLE result (
+    empid VARCHAR2(5),
+    subjectid VARCHAR2(5), 
+    marks INTEGER,
+    CONSTRAINT result_empid_subjectid_pk PRIMARY KEY(empid,subjectid)
+   )
+
+--------------------------------------------------------------------------------------------------
+''===> empty string
+' '====> string with a space
+Primary key is by default NOT NULL. You dont have to mention explicitly as not null
+  CREATE TABLE employeedetails(
+   empid VARCHAR2(5) CONSTRAINT employee_Details_pk PRIMARY KEY,
+   empname VARCHAR2(20) CONSTRAINT employee_details_not_null NOT NULL,
+   basic INTEGER CONSTRAINT employee_details_bsc_not_null NOT NULL);
+
+   INSERT INTO employeedetails VALUES('E0001',null,12000);
+   INSERT INTO employeedetails VALUES('E0002',null,null);
+   INSERT INTO employeedetails VALUES('E0002','Ravi',null);
+   INSERT INTO employeedetails VALUES('E0001','Ravi',15000); --accepted
+   INSERT INTO employeedetails VALUES(null,'Ravi',15000);
+   
+---------------------------------------------------------------------------------
