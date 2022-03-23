@@ -79,4 +79,96 @@ SELECT * FROM trial
 
 SQL is not case sensitive. But we try to write the keywords in uppercase.
 
+-------------------------------------------------------------------------------------------------
+/*                                                 
+    Creating a table
+*/
 
+  CREATE TABLE student(
+   roll INTEGER,
+   name VARCHAR2(20),
+   dob DATE)
+
+/*
+   Drop table    
+
+*/
+     DROP TABLE student 
+
+/*
+     Will show a list of all the tables in the database
+  
+*/
+
+SELECT * FROM TAB
+/*
+   To insert a record in the table
+   INSERT INTO tablename VALUES(data1,data2,data3....dataN)
+*/
+  INSERT INTO student VALUES(1,'Ram','12-Jan-2010')
+  INSERT INTO student VALUES(1,'Ram','12-Jan-2010')  
+/* WE are able to store the same roll number because roll number is not declared as primary key. */
+  INSERT INTO student(roll,name,dob) VALUES(1,'Ram','12-Jan-2010');
+  INSERT INTO student(dob,name,roll) VALUES('12-Jan-2010','Ram',2);
+/* We want to enter name as null */
+  INSERT INTO student VALUES(1,NULL,'13-mar-1991');
+  INSERT INTO student(roll,dob) VALUES (1,'15-Jul-1996');
+
+/*  To see the content of a table     
+  */
+-- To see all the columns from a table
+SELECT * FROM tablename
+SELECT * FROM student
+-- We want to see the selective columns
+SELECT columnname1,columnnameN FROM tablename
+SELECT roll,name FROM student
+-- We want to see all columns but selective rows
+SELECT * FROM tablename <where clause>
+SELECT * FROM student WHERE name='Ram'
+-- We want to see selective columns and selective rows
+SELECT columnname1,columnameN FROM tablename <where clause>
+SELECT roll,dob FROM student WHERE name='Ram'
+-------------------------------------------------------------------------------------------------
+/* Alternate command to drop a table */
+
+DROP TABLE <Table name> CASCADE CONSTRAINTS;
+
+--------------------------------------------------------------
+
+CREATE TABLE Student ( 
+    Studentid INTEGER CONSTRAINT stud_sid_pk PRIMARY KEY,
+    FName VARCHAR2(10), 
+    ContactNo NUMBER (10));
+
+INSERT INTO student VALUES(1,'Sam',9876543210);
+INSERT INTO student VALUES(1,'Sam',9876543210);
+
+ORA-00001: unique constraint (WAL352358.STUD_SID_PK) violated
+[Note the above error is because we have the same studentid for 2 records)
+
+INSERT INTO student VALUES(2,'James',8876443210);
+-- We cannot insert a null value in the primary key column
+INSERT INTO student VALUES(null,'James',8876443210);
+ORA-01400: cannot insert NULL into ("WAL352358"."STUDENT"."STUDENTID")
+
+    CREATE TABLE Marks (
+    CourseId INTEGER, 
+    StudentId INTEGER CONSTRAINT marks_sid_fk REFERENCES Student (StudentId), 
+    MarksScored DECIMAL (5,2));
+
+INSERT INTO marks VALUES(11,1,70);
+INSERT INTO marks VALUES(22,1,90);
+
+INSERT INTO marks VALUES(33,4,90);
+ORA-02291: integrity constraint (WAL352358.MARKS_SID_FK) violated - parent key not found
+[The above error is because the student id 4 is not available in the parent table student]
+
+---------------
+
+DROP TABLE student
+ORA-02449: unique/primary keys in table referenced by foreign keys
+[ We are getting the above error because a student id 1 is present in the child table marks.
+So if we have a reference of any record in the child table, in that case we cannot drop the
+master table with DROP table command. In that case we have to write the command as]
+DROP TABLE <tablename> CASCADE CONSTRAINTS
+DROP TABLE student CASCADE CONSTRAINTS
