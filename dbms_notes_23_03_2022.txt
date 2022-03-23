@@ -238,3 +238,74 @@ Primary key is by default NOT NULL. You dont have to mention explicitly as not n
    INSERT INTO employeedetails VALUES(null,'Ravi',15000);
    
 ---------------------------------------------------------------------------------
+-- We can write as below without giving the constraint name
+  CREATE TABLE employeedetails(
+   empid VARCHAR2(5) PRIMARY KEY,
+   empname VARCHAR2(20)  NOT NULL,
+   basic INTEGER CONSTRAINT  NOT NULL);
+----------------------------------------------------------------------------------------------------
+Not null is a constraint which cannot be applied at table level. It  is
+always applied at a column level.
+
+ CREATE TABLE employeedetails(
+   empid VARCHAR2(5) CONSTRAINT employee_Details_pk PRIMARY KEY,
+   empname VARCHAR2(20),
+   basic INTEGER,
+   CONSTRAINT employee_details_empname NOT NULL(empname));
+-------------------------------------------------------------------------------------------------
+
+ CREATE TABLE employeedetails(
+   empid VARCHAR2(5) CONSTRAINT employee_Details_pk PRIMARY KEY,
+   empname VARCHAR2(20),
+   basic INTEGER,
+   city VARCHAR2(20) default 'Delhi');
+
+ INSERT INTO employeedetails VALUES('E0001','Rahul',23000,'Chennai');
+ INSERT INTO employeedetails VALUES('E0002','Avinash',21000,null);
+ INSERT INTO employeedetails(empid,empname,basic) VALUES('E0003','Rita',21000); -- default value Delhi will be inserted
+------------------------------------------
+PRIMARY KEY CANNOT HAVE A NULL VALUE AND PRIMARY KEY CANNOT CONTAIN duplicate values.
+-------------------------------------------------------------------------------------------------
+CHECK CONSTRAINT
+
+CREATE TABLE Student ( 
+    StudentId INTEGER, 
+    FName VARCHAR2(10), 
+    Gender CHAR(1) CONSTRAINT Stud_gender_ck1 CHECK(Gender IN('M', 'F'))); 
+
+
+  INSERT INTO Student VALUES(1,'Suresh','M');
+  INSERT INTO Student VALUES(2,'Sunita','F');
+  INSERT INTO STudent VALUES(3,'Ahmed','A'); -- ORA-02290: check constraint (WAL352358.STUD_GENDER_CK1) violated
+A is not allowed because with the check constraint for gender we have mentione M and F in the list.
+So those two values are only permissible for the gender column.
+
+CREATE TABLE EmployeeMaster ( 
+    empid INTEGER, 
+    name VARCHAR2(10),
+    dob date,
+    doj date, 
+    CONSTRAINT Employee_dob_doj CHECK(dob<doj));
+
+  INSERT INTO employeemaster VALUES(1,'Soham','12-jan-1980','20-feb-2020');
+  INSERT INTO employeemaster VALUES(2,'Rehan','12-jan-2021','20-feb-2020');
+ORA-02290: check constraint (WAL352358.EMPLOYEE_DOB_DOJ) violated. In the second record dob is
+after doj. 
+------------------------------------------------------------------------------------------------
+Unique key can contain NULL value/values.
+We can have multiple unique columns in a table but primary key can be one.
+-------------------------------------------------------------------------------------- 
+CREATE TABLE Student ( 
+    StudentId INTEGER, 
+    FName VARCHAR2(10), 
+    ContactNo NUMBER(10) CONSTRAINT Stud_cno_uk UNIQUE);
+
+
+   INSERT INTO Student VALUES(1,'Akash',7890123450);
+   INSERT INTO Student VALUES(2,'Deepak',7890123450);
+   INSERT INTO Student VALUES(3,'Rehan',null);
+   INSERT INTO Student VALUES(4,'Sirish',null);
+
+
+
+
